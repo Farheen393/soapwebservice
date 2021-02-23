@@ -32,11 +32,14 @@
                         <password>Anayah**93</password>
                         <applicationName>soapwebservice</applicationName>
                         <environment>Sandbox</environment>
-						<businessGroup>NA</businessGroup>
+			<businessGroup>NA</businessGroup>
                         <workerType>MICRO</workerType>
                         <objectStoreV2>true</objectStoreV2>
+			      <properties>
+			      <key>${keyValue}</key>
+			      </properties>
                     </cloudHubDeployment>
-				</configuration>
+				/configuration>
 
 			</plugin>
 		</plugins>
