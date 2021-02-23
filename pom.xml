@@ -39,7 +39,7 @@
 			      <key>${keyValue}</key>
 			      </properties>
                     </cloudHubDeployment>
-				/configuration>
+				</configuration>
 
 			</plugin>
 		</plugins>
