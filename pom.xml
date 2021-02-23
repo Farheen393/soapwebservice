@@ -30,7 +30,7 @@
                         <muleVersion>4.3.0</muleVersion>
                         <username>FIS</username>
                         <password>Anayah**93</password>
-                        <applicationName>soapwebservice</applicationName>
+                        <applicationName>sampleproject</applicationName>
                         <environment>Sandbox</environment>
 						<businessGroup>NA</businessGroup>
                         <workerType>MICRO</workerType>
