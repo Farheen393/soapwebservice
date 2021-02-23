@@ -14,8 +14,9 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
 		<wsc:connection wsdlLocation="${wsdl}" address="${address}" port="${port}" service="${service}"/>
 	</wsc:config>
 	<configuration doc:name="Configuration" doc:id="3a8ff3b1-950f-40f6-aba2-044b01d70892" defaultErrorHandler-ref="GlobalErrorHandlerError_Handler" />
-	<configuration-properties doc:name="Configuration properties" doc:id="d16fb9ec-1a0b-4eea-89d3-a08eef32af20" file="local.properties" />
+	<configuration-properties doc:name="Configuration properties" doc:id="d16fb9ec-1a0b-4eea-89d3-a08eef32af20" file="${env}.properties" />
 	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="d1a6184a-1029-4ce1-89c6-2c0ca5165106" file="local.properties" key="mytestkey1234567" >
 	</secure-properties:config>
+	<global-property doc:name="Global Property" doc:id="caae588e-6838-4e21-8fe8-aa21596b6a42" name="env" value="local" />
 	
 </mule>
