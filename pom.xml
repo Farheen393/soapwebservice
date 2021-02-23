@@ -33,6 +33,7 @@
                         <applicationName>soapwebservice</applicationName>
                         <environment>Sandbox</environment>
                         <workerType>MICRO</workerType>
+			 <businessGroup>NA</businessGroup>
                         <objectStoreV2>true</objectStoreV2>
                     </cloudHubDeployment>
 				</configuration>
