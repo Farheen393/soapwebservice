@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="InterfaceFlow" doc:id="bdb3ed8b-ee6f-4302-ab33-887447eea8a1" >
+		<http:listener doc:name="Listener" doc:id="c6b3402e-dddb-4810-afde-2e62f1eb8c17" path="/flights" config-ref="HTTP_Listener_config1">
+			<http:error-response statusCode="#[vars.httpStatusCode]">
+				<http:body ><![CDATA[#[payload]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<set-variable value="#[%dw 2.0
+output application/java
+---
+message.attributes.queryParams.destination]" doc:name="Set Variable" doc:id="de965275-cdc9-45a4-84fd-a9d4c50b5e5a" variableName="InputDestination"/>
+		<logger level="INFO" doc:name="StartLogger" doc:id="202aa62d-b08f-4846-9628-7921059c67eb" message='#[%dw 2.0
+output application/json
+---
+{
+	
+	RequestLogger :"Request Message sent Successfully !" ++ " " ++ vars.InputDestination as String default "",
+}]'/>
+		<flow-ref doc:name="Implementation" doc:id="bda9918e-4b01-4389-9b13-829fdf0f6b6b" name="ImplementationFlow" target="FlightPayload"/>
+		<set-payload value="#[vars.FlightPayload]" doc:name="Set Payload" doc:id="fc710234-f392-4497-a0d4-e75342806e3d" />
+		<logger level="INFO" doc:name="EndLogger" doc:id="a504644e-7d11-4e86-a043-5b32b23fd7dc" message="#[%dw 2.0
+output application/json
+ns ns0 http://soap.training.mulesoft.com/
+---
+{	
+ ResponseLogger :  vars.FlightPayload
+ 
+ }]"/>
+	</flow>
+</mule>

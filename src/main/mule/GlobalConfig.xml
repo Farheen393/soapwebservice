@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
+	<http:listener-config name="HTTP_Listener_config1" doc:name="HTTP Listener config" doc:id="732aff1f-8c51-455d-9094-56fc25869162" basePath="/api" >
+		<http:listener-connection port="${secure::http.port}" host="${secure::http.host}"/>
+	</http:listener-config>
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="3c11e1c0-76c8-4974-9f10-03b869bc3d2c">
+		<wsc:connection wsdlLocation="${wsdl}" address="${address}" port="${port}" service="${service}"/>
+	</wsc:config>
+	<configuration doc:name="Configuration" doc:id="3a8ff3b1-950f-40f6-aba2-044b01d70892" defaultErrorHandler-ref="GlobalErrorHandlerError_Handler" />
+	<configuration-properties doc:name="Configuration properties" doc:id="d16fb9ec-1a0b-4eea-89d3-a08eef32af20" file="local.properties" />
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="d1a6184a-1029-4ce1-89c6-2c0ca5165106" file="local.properties" key="mytestkey1234567" >
+	</secure-properties:config>
+	
+</mule>

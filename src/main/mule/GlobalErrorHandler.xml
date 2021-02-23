@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<error-handler name="GlobalErrorHandlerError_Handler" doc:id="9e57a1cc-420e-4f77-9541-0fed50b6fa90" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="4bf79b8f-845b-4c76-a5cb-8c91e915779a" type="WSC:INVALID_WSDL">
+			<set-variable value="503" doc:name="Invalid_WSDL_Variable" doc:id="ba34fc4b-fef2-4a03-a729-cbe698167735" variableName="httpStatusCode"/>
+			<ee:transform doc:name="Invalid_WSDL_ErrorMsg" doc:id="0dd20b15-027f-4e8a-b518-d7ae5dcfba5f" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	errorMessage : "WSDL is invalid ! Please check WSDL URL in Configuration File " ,
+	errorDescription : error.description
+	
+}
+]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="ErrorLog_Flow Reference" doc:id="44660eb6-156f-4770-bf75-8e22ad86a8b5" name="ErrorLogger_GlobalErrorHandlerFlow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7fef924d-7974-4a81-a58e-e7d7ccc46ef8" type="WSC:CONNECTIVITY">
+			<set-variable value="503" doc:name="CONNECTIVITY_Variable" doc:id="8e4cebc9-b43c-434d-9816-b18932cb90d5" variableName="httpStatusCode" />
+			<ee:transform doc:name="CONNECTIVITY_ErrorMsg" doc:id="b2328ceb-fecd-4aa9-a259-fdeffe843849" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	errorMessage : "Service connectivity error occurred ! Please check connectivity" ,
+	errorDescription : error.description	
+}
+]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="ErrorLog_Flow Reference" doc:id="5d30c45e-5b37-4257-8a74-9f855e576bf8" name="ErrorLogger_GlobalErrorHandlerFlow" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="4e9f2777-545c-4c76-93c6-a4d970a32fb4" type="WSC:BAD_REQUEST">
+			<set-variable value="400" doc:name="BAD_REQUEST_Variable" doc:id="4e3a70e3-daaa-44bb-99d5-1b86071d43b3" variableName="httpStatusCode" />
+			<ee:transform doc:name="BAD_REQUEST_ErrorMsg" doc:id="15234aa3-8a56-40b9-9750-65c412e46600" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	errorMessage : "Bad Input Request  ! Please check Request Message" ,
+	errorDescription : error.description	
+}
+]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="ErrorLog_Flow Reference" doc:id="020310a9-9729-4430-a0a2-b88f8f8928db" name="ErrorLogger_GlobalErrorHandlerFlow" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="3b460c42-76a5-4da5-9b86-e483b497d556" type="WSC:TIMEOUT">
+			<set-variable value="400" doc:name="TIMEOUT_Variable" doc:id="2e8f3059-e4a9-485e-b794-8cc62d80abf2" variableName="httpStatusCode" />
+			<ee:transform doc:name="TIMEOUT_ErrorMsg" doc:id="4dfcb8e0-640f-4c20-9a39-615a81358d8d" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	errorMessage : "TIMEOUT ERROR ! Please check Service " ,
+	errorDescription : error.description	
+}
+]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="ErrorLog_Flow Reference" doc:id="dd89a54f-ce69-4385-8b1d-1f698fe0c3c5" name="ErrorLogger_GlobalErrorHandlerFlow" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="9ee17edd-1dd4-4263-b180-147ac2087cab" type="ANY">
+		<set-variable value="500" doc:name="GENERIC_Variable" doc:id="7c51d5b0-35a3-4e33-81f8-3ccbdfe3bfkk" variableName="httpStatusCode" />
+			<ee:transform doc:name="GENERIC_ErrorMsg" doc:id="6e6f1e0b-3558-4ab7-83a6-6046d5dc4chj" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	errorMessage : "GENERIC ERROR ! Please check the application " ,
+	errorDescription : error.description	
+}
+]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<flow-ref doc:name="ErrorLog_Flow Reference" doc:id="9b9095b1-e594-47bf-a908-19e3cdfb35b3" name="ErrorLogger_GlobalErrorHandlerFlow" />
+			
+</on-error-propagate>
+	</error-handler>
+	<flow name="ErrorLogger_GlobalErrorHandlerFlow" doc:id="6f23a26f-ab36-4235-b2d6-45937582e708" >
+		<logger level="ERROR" doc:name="ErrorLogger" doc:id="6c4cb572-0895-4aa1-a12a-22a4948273c2" message="#[%dw 2.0
+output application/json
+---
+{
+	ErrorPayload : payload ,
+	ErrorHTTPStatusCode : vars.httpStatusCode
+}]" />
+	</flow>
+</mule>
