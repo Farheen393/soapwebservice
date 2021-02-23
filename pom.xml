@@ -28,7 +28,7 @@
 			 <cloudHubDeployment>
                         <uri>https://anypoint.mulesoft.com</uri>
                         <muleVersion>4.3.0</muleVersion>
-                        <username>FarheenShaikh</username>
+                        <username>FIS</username>
                         <password>Anayah**93</password>
                         <applicationName>soapwebservice</applicationName>
                         <environment>Sandbox</environment>
