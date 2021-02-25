@@ -96,6 +96,12 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
+		    <groupId>com.mulesoft.munit</groupId>
+		    <artifactId>munit-remote</artifactId>
+		    <version>2.3.1</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.mulesoft.munit</groupId>
 			<artifactId>munit-runner</artifactId>
 			<version>2.3.1</version>
