@@ -37,6 +37,9 @@
 						<environment>Sandbox</environment>
 						<workerType>MICRO</workerType>
 						<objectStoreV2>true</objectStoreV2>
+						<properties>
+							<key>${keyValue}</key>
+						</properties>
 					</cloudHubDeployment>
 				</configuration>
 			</plugin>
