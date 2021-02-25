@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="soapwebservice-test-suite.xml" />
+	<munit:before-suite name="soapwebservice-test-suiteBefore_Suite" doc:id="c0cc614e-17a5-4499-8c58-e79162c9dbca" >
+		<logger level="INFO" doc:name="Logger" doc:id="f09aec03-e697-49c0-9c24-a1e7a8a0e2a7" message="----------------Test Suite Started----------------"/>
+	</munit:before-suite>
+	<munit:test name="SuccessTestCase1" doc:id="af9c3478-9009-40c0-8e09-a8e1a7dae5c1">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when WSC Response" doc:id="732747b2-eeab-47e0-be20-61734c080d28" processor="wsc:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Web_Service_Consumer_Config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('FindFlights_test1.xml')]" mediaType="application/xml" encoding="UTF-8" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="09607138-f219-4867-b8ae-693e9e365764">
+				<munit:attributes value="#[{ method : 'GET', queryParams : { destination : 'SFO'}}]" />
+				
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to InterfaceFlow" doc:id="a413ff6d-9d29-4df0-bfcb-123486403439" name="InterfaceFlow" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals CheckStatusCode 200" doc:id="00ca9b9f-7b70-4637-9c12-aebe40f2203f" actual="#[vars.httpStatus as String]" expected="200" message="Successful Response !"/>
+			<munit-tools:assert-that doc:name="Assert that CheckPayload" doc:id="6bd33219-6611-4cf6-b901-27fd91d1a3c4" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="ValidationErrorTestCase2" doc:id="84e2b30a-86ed-40b4-8299-9e5671d9aac8" expectedErrorType="VALIDATION:NULL">
+		<munit:execution>
+			<flow-ref doc:name="Copy_of_Flow-ref to InterfaceFlow" doc:id="52738b9d-7041-4e9b-b542-4751f7d7a51e" name="InterfaceFlow" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that CheckStatusCode 400" doc:id="8263fbad-8e55-489f-a749-ce258584b468" is="#[MunitTools::equalTo('500')]" expression="vars.httpStatusCode" message='#[message : vars.httpStatusCode ++ " " ++ "not equal to 400"]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="ConnectivityErrorTestCase3" doc:id="a6a84143-cc95-4421-b4f1-23cf1b485754" expectedErrorType="WSC:CONNECTIVITY">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when WSC Response" doc:id="a6c011ac-97ba-422b-ae40-ae83ba8c8137" processor="wsc:consume">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Web_Service_Consumer_Config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="WSC:CONNECTIVITY" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Copy_of_Set Event" doc:id="8bbfbe8f-3c03-409e-b25f-aa404661c78a">
+				<munit:attributes value="#[{ method : 'GET', queryParams : { destination : 'SFO'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Copy_of_Copy_of_Flow-ref to InterfaceFlow" doc:id="cec889cf-90c3-4828-81af-7ed5d05d62d3" name="InterfaceFlow" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals CheckStatusCode 503" doc:id="50a4dc1d-bc9e-4d1f-a1d5-72a05787db33" actual="#[vars.httpStatusCode as String]" expected="503"/>
+		</munit:validation>
+	</munit:test>
+	<munit:after-suite name="soapwebservice-test-suiteAfter_Suite" doc:id="a0d8e56a-0347-4331-87ee-52503d45dca2" >
+		<logger level="INFO" doc:name="Logger" doc:id="b594913c-49df-424a-bc4c-6843ec860fa8" message="-------------- Test Suite Completed ------------------"/>
+	</munit:after-suite>
+
+
+</mule>

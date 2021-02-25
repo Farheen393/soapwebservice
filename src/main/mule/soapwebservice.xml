@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
 	<flow name="InterfaceFlow" doc:id="bdb3ed8b-ee6f-4302-ab33-887447eea8a1" >
 		<http:listener doc:name="Listener" doc:id="c6b3402e-dddb-4810-afde-2e62f1eb8c17" path="/flights" config-ref="HTTP_Listener_config1">
+			<http:response statusCode="#[vars.httpStatus]" />
 			<http:error-response statusCode="#[vars.httpStatusCode]">
 				<http:body ><![CDATA[#[payload]]]></http:body>
 			</http:error-response>
@@ -23,8 +25,20 @@ output application/json
 	
 	RequestLogger :"Request Message sent Successfully !" ++ " " ++ vars.InputDestination as String default "",
 }]'/>
+		<validation:is-not-null doc:name="Is not null" doc:id="375c5db9-a94f-4cca-9fc7-3048f9cc7f82" value="#[vars.InputDestination]" message="Destination is empty ! Please provide valid parameter"/>
 		<flow-ref doc:name="Implementation" doc:id="bda9918e-4b01-4389-9b13-829fdf0f6b6b" name="ImplementationFlow" target="FlightPayload"/>
-		<set-payload value="#[vars.FlightPayload]" doc:name="Set Payload" doc:id="fc710234-f392-4497-a0d4-e75342806e3d" />
+		<ee:transform doc:name="Transform Message" doc:id="f43757d4-ee03-4d35-92c5-4f77972e5e7e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+vars.FlightPayload
+]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[200]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
 		<logger level="INFO" doc:name="EndLogger" doc:id="a504644e-7d11-4e86-a043-5b32b23fd7dc" message="#[%dw 2.0
 output application/json
 ns ns0 http://soap.training.mulesoft.com/

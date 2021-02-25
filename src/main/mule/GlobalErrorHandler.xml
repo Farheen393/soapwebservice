@@ -38,7 +38,7 @@ output application/json
 			</ee:transform>
 			<flow-ref doc:name="ErrorLog_Flow Reference" doc:id="5d30c45e-5b37-4257-8a74-9f855e576bf8" name="ErrorLogger_GlobalErrorHandlerFlow" />
 		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="4e9f2777-545c-4c76-93c6-a4d970a32fb4" type="WSC:BAD_REQUEST">
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate," doc:id="4e9f2777-545c-4c76-93c6-a4d970a32fb4" type="WSC:BAD_REQUEST,VALIDATION:NULL">
 			<set-variable value="400" doc:name="BAD_REQUEST_Variable" doc:id="4e3a70e3-daaa-44bb-99d5-1b86071d43b3" variableName="httpStatusCode" />
 			<ee:transform doc:name="BAD_REQUEST_ErrorMsg" doc:id="15234aa3-8a56-40b9-9750-65c412e46600" >
 				<ee:message >
