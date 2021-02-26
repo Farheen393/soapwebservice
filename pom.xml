@@ -36,6 +36,7 @@
 						<applicationName>soapwebservice</applicationName>
 						<environment>Sandbox</environment>
 						<workerType>MICRO</workerType>
+						<businessGroup>NA</buinessGroup>
 						<objectStoreV2>true</objectStoreV2>
 						<properties>
 							<key>${keyValue}</key>
